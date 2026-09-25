@@ -416,6 +416,14 @@ section { position: relative; padding: 110px 0; }
 .nav-burger.is-open span:nth-child(2) { opacity: 0; }
 .nav-burger.is-open span:nth-child(3) { transform: translateY(-6.5px) rotate(-45deg); }
 
+/* Larger tap targets on touch devices */
+@media (pointer: coarse) {
+  .nav-burger, .theme-toggle, .cmdk-trigger, .project-toggle, .dot-nav a {
+    min-width: 44px;
+    min-height: 44px;
+  }
+}
+
 .mobile-menu {
   position: fixed;
   top: 0; right: 0;
@@ -447,6 +455,7 @@ section { position: relative; padding: 110px 0; }
    ============================================ */
 .hero {
   min-height: 100vh;
+  min-height: 100svh;
   display: flex;
   flex-direction: column;
   align-items: center;
