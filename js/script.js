@@ -212,20 +212,24 @@
       { name: 'SQL', detail: 'Used for data extraction, transformation, and standardizing experiment workflows alongside Git/GitHub.' },
       { name: 'C', detail: 'Foundational systems programming from the B.Tech curriculum.' },
       { name: 'HTML', detail: 'Markup for building and structuring interactive front-end interfaces and dashboards.' },
+      { name: 'Web Development', detail: 'Built the Streamlit web UI for the CCTV order-verification tool, plus this portfolio site itself.' },
     ]},
     { cat: 'Machine Learning', items: [
       { name: 'Scikit-learn', detail: 'Built regression, classification, and clustering models — including the Logistic Regression core of the review-detection system.' },
       { name: 'TensorFlow', detail: 'Engineered deep-learning models reaching up to 92% accuracy at Aesthetix Edu-Tech.' },
-      { name: 'PyTorch', detail: 'Used alongside TensorFlow for deep-learning model development and experimentation.' },
+      { name: 'PyTorch', detail: 'Backing framework for Grounding DINO in the CCTV order-verification system, and used alongside TensorFlow for deep-learning experimentation.' },
       { name: 'Pandas', detail: 'Built data pipelines that cut data loading times by 25% and accelerated training cycles.' },
       { name: 'NumPy', detail: 'Numerical backbone for analyzing and visualizing 10,000+ records during cloud/data internships.' },
+      { name: 'Hugging Face Transformers', detail: 'Used to run Grounding DINO for zero-shot object detection in the CCTV order-verification system.' },
     ]},
     { cat: 'Computer Vision / NLP', items: [
       { name: 'OpenCV', detail: 'Powered image enhancement and plate localization in the License Plate Detection System.' },
       { name: 'Tesseract OCR', detail: 'Integrated for text extraction in the portable license-plate recognition pipeline.' },
       { name: 'TF-IDF', detail: 'Feature extraction technique behind the Fake Product Review Detection classifier.' },
-      { name: 'Object Detection', detail: 'Applied for plate localization ahead of OCR in the license-plate pipeline.' },
+      { name: 'Object Detection', detail: 'Applied for plate localization ahead of OCR in the license-plate pipeline, and for zero-shot item detection in the CCTV order-verification system.' },
       { name: 'Image Enhancement', detail: 'Used to improve input quality before detection and OCR stages.' },
+      { name: 'Grounding DINO', detail: 'Zero-shot object detector chosen for the CCTV order-verification system — no labeled training data needed, items prompted in natural language.' },
+      { name: 'ffmpeg', detail: 'Used to extract and process frames from CCTV footage in the order-verification pipeline.' },
     ]},
     { cat: 'Generative AI', items: [
       { name: 'AI Image Generation', detail: 'Directed AI-generated images for creative and brand-focused projects at Peblo.' },
@@ -233,7 +237,7 @@
       { name: 'Prompt Engineering', detail: 'Refined prompts to keep characters, scenes, and visual styles consistent across deliverables.' },
     ]},
     { cat: 'MLOps / Development', items: [
-      { name: 'Git', detail: 'Version control across all ML and data engineering work.' },
+      { name: 'Git', detail: 'Version control across all ML and data engineering work — including Git worktrees for isolated model-evaluation experiments.' },
       { name: 'GitHub', detail: 'Collaboration and workflow standardization with the Aesthetix ML team.' },
       { name: 'Docker', detail: 'Used for model packaging as part of MLOps practice.' },
       { name: 'GitHub Actions', detail: 'CI/CD automation supporting experiment and deployment workflows.' },
@@ -356,7 +360,7 @@
   /* ---------------- Magnetic buttons ---------------- */
   if (!reduceMotion) {
     document.querySelectorAll('.btn, .contact-chip, .cmdk-trigger').forEach(el => {
-      const strength = 12;
+      const strength = 7;
       el.addEventListener('mousemove', (e) => {
         const r = el.getBoundingClientRect();
         const dx = (e.clientX - r.left - r.width / 2) / r.width;
@@ -370,7 +374,7 @@
   /* ---------------- Pointer tilt on showcase cards ---------------- */
   if (!reduceMotion) {
     document.querySelectorAll('.project-card, .cert-card, .focus-card, .fact-card').forEach(el => {
-      const max = 4;
+      const max = 2.5;
       el.addEventListener('mousemove', (e) => {
         const r = el.getBoundingClientRect();
         const px = (e.clientX - r.left) / r.width - 0.5;

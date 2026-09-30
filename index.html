@@ -439,7 +439,49 @@
         <article class="project-card reveal" data-open="false">
           <div class="project-top">
             <div>
-              <span class="project-index">Project 01</span>
+              <span class="project-index">Project 01 <span class="project-badge">Featured</span></span>
+              <h3 class="project-title">Order Evidence System — CCTV-Based Order Verification</h3>
+              <p class="project-stack">Computer Vision · Zero-Shot Detection · Streamlit</p>
+            </div>
+            <button class="project-toggle" aria-label="Expand project">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
+            </button>
+          </div>
+          <div class="project-metrics">
+            <div><b>90%+</b><span>fewer false positives</span></div>
+            <div><b>Zero-shot</b><span>no training data needed</span></div>
+            <div><b>Human-in-the-loop</b><span>ambiguous cases reviewed, not guessed</span></div>
+          </div>
+          <div class="project-body">
+            <div class="project-body-inner">
+              <div class="project-cols">
+                <div>
+                  <h4>Problem</h4>
+                  <p>Customer-service agents had to manually scrub through CCTV footage to resolve delivery-order complaints like "my order was missing an item" for a quick-service restaurant client — slow, inconsistent, and hard to scale.</p>
+                </div>
+                <div>
+                  <h4>Approach</h4>
+                  <p>Took over a partially-built prototype and productionized it: a zero-shot object-detection pipeline (Grounding DINO) identifies packed items from overhead CCTV with no labeled training data, then a timestamp/sequence-first matching algorithm — never by content alone — links detected packing events to the order, surfacing an explicit ambiguous state for human review instead of guessing.</p>
+                </div>
+                <div>
+                  <h4>Result</h4>
+                  <p>Root-caused a false-positive problem to overly loose region-of-interest cropping and cut false positives by over 90% while preserving true detections, then shipped a plain-language checklist UI so non-technical customer-service agents can review evidence and log verdicts.</p>
+                </div>
+              </div>
+              <ul class="project-highlights">
+                <li>Benchmarked Grounding DINO against YOLO — found YOLO missed a real, photo-verified item on the production camera zone and carried an AGPL-3.0 licence that would force open-sourcing the product; documented the decision to reject it.</li>
+                <li>Fixed a duplicate-detection bug (two touching items counted as one), traced to an overly aggressive bounding-box merge threshold, and re-verified against the full regression suite to confirm nothing else regressed.</li>
+                <li>Built automatic checks that flag when a camera's saved calibration doesn't match its actual footage — catching two real mislabeled video files before they could produce misleading results.</li>
+              </ul>
+              <p class="project-stack-full"><span class="muted">Stack:</span> Python, Streamlit, OpenCV, ffmpeg, Grounding DINO (via Hugging Face Transformers), PyTorch, Git worktrees for isolated experimentation.</p>
+            </div>
+          </div>
+        </article>
+
+        <article class="project-card reveal" data-open="false">
+          <div class="project-top">
+            <div>
+              <span class="project-index">Project 02</span>
               <h3 class="project-title">Hospital Information System (HIS) Development</h3>
               <p class="project-stack">Healthcare Software · System Development · AI/ML Environment</p>
             </div>
@@ -468,7 +510,7 @@
         <article class="project-card reveal" data-open="false">
           <div class="project-top">
             <div>
-              <span class="project-index">Project 02</span>
+              <span class="project-index">Project 03</span>
               <h3 class="project-title">Fake Product Review Detection</h3>
               <p class="project-stack">Machine Learning · NLP · Streamlit</p>
             </div>
@@ -502,7 +544,7 @@
         <article class="project-card reveal" data-open="false">
           <div class="project-top">
             <div>
-              <span class="project-index">Project 03</span>
+              <span class="project-index">Project 04</span>
               <h3 class="project-title">License Plate Detection System</h3>
               <p class="project-stack">Python · OpenCV · Tesseract OCR · Raspberry Pi</p>
             </div>
@@ -551,7 +593,7 @@
         <div class="gallery-tile" style="--h:250;" tabindex="0" role="button" aria-pressed="false">
           <div class="tile-inner">
             <div class="tile-front">
-              <span class="tile-flip-hint">Click ↻</span>
+              <span class="tile-flip-hint">Details ↻</span>
               <div class="tile-icon" style="--icon-color: var(--accent-1);">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="14" height="14" rx="2"/><circle cx="8" cy="10" r="1.4"/><path d="M3 16l4-4 3 3 4-5 3 3"/><path d="M19 3l.8 2 2 .8-2 .8-.8 2-.8-2-2-.8 2-.8z"/></svg>
               </div>
@@ -563,7 +605,7 @@
         <div class="gallery-tile" style="--h:190;" tabindex="0" role="button" aria-pressed="false">
           <div class="tile-inner">
             <div class="tile-front">
-              <span class="tile-flip-hint">Click ↻</span>
+              <span class="tile-flip-hint">Details ↻</span>
               <div class="tile-icon" style="--icon-color: var(--accent-2);">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="5" width="15" height="14" rx="2"/><path d="M9 9.2l5 2.8-5 2.8V9.2z" fill="currentColor" stroke="none"/><path d="M20 8l2-1.2v10.4L20 16"/></svg>
               </div>
@@ -575,7 +617,7 @@
         <div class="gallery-tile" style="--h:310;" tabindex="0" role="button" aria-pressed="false">
           <div class="tile-inner">
             <div class="tile-front">
-              <span class="tile-flip-hint">Click ↻</span>
+              <span class="tile-flip-hint">Details ↻</span>
               <div class="tile-icon" style="--icon-color: #b28dff;">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="14" rx="2"/><path d="M6 9l3 2-3 2"/><path d="M12 13h6"/></svg>
               </div>
@@ -587,7 +629,7 @@
         <div class="gallery-tile" style="--h:150;" tabindex="0" role="button" aria-pressed="false">
           <div class="tile-inner">
             <div class="tile-front">
-              <span class="tile-flip-hint">Click ↻</span>
+              <span class="tile-flip-hint">Details ↻</span>
               <div class="tile-icon" style="--icon-color: var(--accent-1);">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="5" cy="12" r="3"/><circle cx="12" cy="12" r="3"/><circle cx="19" cy="12" r="3" stroke-dasharray="2 2"/></svg>
               </div>
@@ -599,7 +641,7 @@
         <div class="gallery-tile" style="--h:280;" tabindex="0" role="button" aria-pressed="false">
           <div class="tile-inner">
             <div class="tile-front">
-              <span class="tile-flip-hint">Click ↻</span>
+              <span class="tile-flip-hint">Details ↻</span>
               <div class="tile-icon" style="--icon-color: var(--accent-2);">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M9 5v14M15 5v14"/><circle cx="5.5" cy="8" r=".6" fill="currentColor" stroke="none"/><circle cx="5.5" cy="16" r=".6" fill="currentColor" stroke="none"/><circle cx="18.5" cy="8" r=".6" fill="currentColor" stroke="none"/><circle cx="18.5" cy="16" r=".6" fill="currentColor" stroke="none"/></svg>
               </div>
@@ -611,7 +653,7 @@
         <div class="gallery-tile" style="--h:220;" tabindex="0" role="button" aria-pressed="false">
           <div class="tile-inner">
             <div class="tile-front">
-              <span class="tile-flip-hint">Click ↻</span>
+              <span class="tile-flip-hint">Details ↻</span>
               <div class="tile-icon" style="--icon-color: #b28dff;">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20L16 8"/><path d="M14 6l1.5 1.5"/><path d="M19 3l.6 1.4L21 5l-1.4.6L19 7l-.6-1.4L17 5l1.4-.6z"/><path d="M6 14l.5 1.2L8 16l-1.5.6L6 18l-.5-1.4L4 16l1.5-.6z"/></svg>
               </div>
