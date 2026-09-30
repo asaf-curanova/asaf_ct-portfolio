@@ -130,29 +130,6 @@
 
   sections.forEach(s => navObserver.observe(s));
 
-  /* ---------------- Decode/scramble text effect ---------------- */
-  const SCRAMBLE_CHARS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
-  function scrambleText(el) {
-    const original = el.textContent;
-    const len = original.length;
-    const totalFrames = 16;
-    let frame = 0;
-    function tick() {
-      let out = '';
-      for (let i = 0; i < len; i++) {
-        const ch = original[i];
-        if (ch === ' ') { out += ' '; continue; }
-        const revealAt = (i / len) * totalFrames * 0.7;
-        out += frame >= revealAt ? ch : SCRAMBLE_CHARS[Math.floor(Math.random() * SCRAMBLE_CHARS.length)];
-      }
-      el.textContent = out;
-      frame++;
-      if (frame <= totalFrames) requestAnimationFrame(tick);
-      else el.textContent = original;
-    }
-    tick();
-  }
-
   /* ---------------- Scroll reveal ---------------- */
   const revealEls = document.querySelectorAll('.reveal');
   if (reduceMotion) {
@@ -162,7 +139,6 @@
       entries.forEach(entry => {
         if (entry.isIntersecting) {
           entry.target.classList.add('is-visible');
-          if (entry.target.classList.contains('section-kicker')) scrambleText(entry.target);
           revealObserver.unobserve(entry.target);
         }
       });
