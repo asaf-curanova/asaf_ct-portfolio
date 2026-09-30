@@ -1,5 +1,5 @@
 """Generates og-image.png and favicon assets for the portfolio, matching the site's
-dark/indigo/teal visual identity. Run once locally; not needed at deploy time."""
+dark blue/gold "trust + achievement" visual identity. Run once locally; not needed at deploy time."""
 
 from PIL import Image, ImageDraw, ImageFont, ImageFilter
 import os
@@ -8,9 +8,9 @@ OUT_DIR = os.path.join(os.path.dirname(__file__), "..", "assets")
 os.makedirs(OUT_DIR, exist_ok=True)
 
 BG = (8, 9, 12, 255)
-ACCENT_1 = (124, 140, 255)   # indigo
-ACCENT_2 = (79, 209, 197)    # teal
-ACCENT_3 = (178, 141, 255)   # violet
+ACCENT_1 = (76, 111, 239)    # cobalt blue
+ACCENT_2 = (95, 168, 255)    # sky blue
+ACCENT_3 = (217, 165, 68)    # gold
 TEXT = (237, 238, 241)
 MUTED = (154, 160, 170)
 
@@ -64,7 +64,7 @@ def make_og():
 
     d.text((left, y), "MOHAMMED ASAF ", font=name_font, fill=TEXT)
     name_w = d.textlength("MOHAMMED ASAF ", font=name_font)
-    d.text((left + name_w, y), "CT", font=name_font, fill=ACCENT_2)
+    d.text((left + name_w, y), "CT", font=name_font, fill=ACCENT_3)
     y += 100
 
     d.text((left, y), "AI Data Engineer", font=role_font, fill=MUTED)

@@ -14,10 +14,13 @@
   --text-muted: #9aa0aa;
   --text-faint: #5c6169;
 
-  --accent-1: #7c8cff;
-  --accent-2: #4fd1c5;
+  --accent-1: #4c6fef;
+  --accent-2: #5fa8ff;
+  --accent-gold: #d9a544;
   --accent-grad: linear-gradient(120deg, var(--accent-1), var(--accent-2));
-  --accent-soft: rgba(124, 140, 255, 0.12);
+  --accent-grad-gold: linear-gradient(120deg, var(--accent-1), var(--accent-gold));
+  --accent-soft: rgba(76, 111, 239, 0.12);
+  --accent-soft-gold: rgba(217, 165, 68, 0.14);
 
   --radius-sm: 10px;
   --radius-md: 16px;
@@ -46,7 +49,7 @@
   --text: #14161a;
   --text-muted: #565c66;
   --text-faint: #8b909a;
-  --accent-soft: rgba(124, 140, 255, 0.10);
+  --accent-soft: rgba(76, 111, 239, 0.10);
   color-scheme: light;
 }
 
@@ -120,7 +123,7 @@ section { position: relative; padding: 110px 0; }
 }
 
 .accent-text {
-  background: var(--accent-grad);
+  background: var(--accent-grad-gold);
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
@@ -494,7 +497,7 @@ section { position: relative; padding: 110px 0; }
 }
 .orb-1 { width: 420px; height: 420px; background: var(--accent-1); top: -10%; left: -8%; --depth: 1; }
 .orb-2 { width: 380px; height: 380px; background: var(--accent-2); bottom: -12%; right: -6%; animation-delay: -5s; --depth: -1.4; }
-.orb-3 { width: 260px; height: 260px; background: #b28dff; top: 40%; right: 22%; animation-delay: -10s; opacity: 0.22; --depth: 0.8; }
+.orb-3 { width: 260px; height: 260px; background: var(--accent-gold); top: 40%; right: 22%; animation-delay: -10s; opacity: 0.18; --depth: 0.8; }
 
 @keyframes float {
   0%, 100% { transform: translate(calc(var(--px) * var(--depth)), calc(var(--py) * var(--depth))) scale(1); }
@@ -999,8 +1002,8 @@ section { position: relative; padding: 110px 0; }
   margin-left: 8px;
   padding: 2px 9px;
   border-radius: 999px;
-  background: var(--accent-soft);
-  color: var(--accent-2);
+  background: var(--accent-soft-gold);
+  color: var(--accent-gold);
   font-size: 10.5px;
   letter-spacing: 0.04em;
   text-transform: uppercase;
@@ -1303,7 +1306,7 @@ section { position: relative; padding: 110px 0; }
   transition: border-color var(--dur-fast) ease, transform var(--dur-fast) var(--ease);
 }
 .cert-card:hover { border-color: var(--border-strong); transform: translateY(-3px); }
-.cert-icon { color: var(--accent-2); font-size: 18px; }
+.cert-icon { color: var(--accent-gold); font-size: 18px; }
 .cert-card h4 { font-family: var(--font-display); font-size: 15.5px; font-weight: 600; margin: 12px 0 6px; }
 .cert-card p { color: var(--text-faint); font-size: 13px; }
 
