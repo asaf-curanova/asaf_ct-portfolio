@@ -49,6 +49,114 @@
     });
   }
 
+  /* ---------------- Hero particle network ---------------- */
+  const particleCanvas = document.getElementById('particleCanvas');
+  if (particleCanvas && heroSection && !reduceMotion) {
+    const ctx = particleCanvas.getContext('2d');
+    let w = 0, h = 0, dpr = 1;
+    let particles = [];
+    const mouse = { x: null, y: null };
+    let animRunning = true;
+
+    function hexToRgb(hex) {
+      const n = parseInt(hex.replace('#', ''), 16);
+      return [(n >> 16) & 255, (n >> 8) & 255, n & 255];
+    }
+    const styles = getComputedStyle(document.documentElement);
+    const rgbBlue = hexToRgb(styles.getPropertyValue('--accent-2').trim() || '#5fa8ff');
+    const rgbGold = hexToRgb(styles.getPropertyValue('--accent-gold').trim() || '#d9a544');
+
+    function resizeParticles() {
+      dpr = Math.min(window.devicePixelRatio || 1, 2);
+      w = heroSection.clientWidth;
+      h = heroSection.clientHeight;
+      particleCanvas.width = w * dpr;
+      particleCanvas.height = h * dpr;
+      particleCanvas.style.width = w + 'px';
+      particleCanvas.style.height = h + 'px';
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      const count = Math.min(85, Math.floor((w * h) / 15000));
+      particles = Array.from({ length: count }, () => ({
+        x: Math.random() * w,
+        y: Math.random() * h,
+        vx: (Math.random() - 0.5) * 0.25,
+        vy: (Math.random() - 0.5) * 0.25,
+        gold: Math.random() < 0.12,
+      }));
+    }
+
+    function stepParticles() {
+      requestAnimationFrame(stepParticles);
+      if (!animRunning) return;
+      ctx.clearRect(0, 0, w, h);
+      const linkDist = 130;
+
+      particles.forEach((p) => {
+        p.x += p.vx;
+        p.y += p.vy;
+        if (p.x < 0 || p.x > w) p.vx *= -1;
+        if (p.y < 0 || p.y > h) p.vy *= -1;
+        if (mouse.x !== null) {
+          const dx = mouse.x - p.x, dy = mouse.y - p.y;
+          const d = Math.hypot(dx, dy);
+          if (d < 160) { p.x += dx * 0.003; p.y += dy * 0.003; }
+        }
+      });
+
+      for (let i = 0; i < particles.length; i++) {
+        const a = particles[i];
+        for (let j = i + 1; j < particles.length; j++) {
+          const b = particles[j];
+          const dist = Math.hypot(a.x - b.x, a.y - b.y);
+          if (dist < linkDist) {
+            ctx.strokeStyle = `rgba(${rgbBlue[0]},${rgbBlue[1]},${rgbBlue[2]},${(1 - dist / linkDist) * 0.35})`;
+            ctx.lineWidth = 1;
+            ctx.beginPath();
+            ctx.moveTo(a.x, a.y);
+            ctx.lineTo(b.x, b.y);
+            ctx.stroke();
+          }
+        }
+        if (mouse.x !== null) {
+          const dist = Math.hypot(a.x - mouse.x, a.y - mouse.y);
+          const reach = linkDist * 1.2;
+          if (dist < reach) {
+            ctx.strokeStyle = `rgba(${rgbGold[0]},${rgbGold[1]},${rgbGold[2]},${(1 - dist / reach) * 0.5})`;
+            ctx.lineWidth = 1;
+            ctx.beginPath();
+            ctx.moveTo(a.x, a.y);
+            ctx.lineTo(mouse.x, mouse.y);
+            ctx.stroke();
+          }
+        }
+      }
+
+      particles.forEach((p) => {
+        const c = p.gold ? rgbGold : rgbBlue;
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.gold ? 2.2 : 1.5, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(${c[0]},${c[1]},${c[2]},0.85)`;
+        ctx.fill();
+      });
+    }
+
+    resizeParticles();
+    window.addEventListener('resize', resizeParticles);
+    heroSection.addEventListener('mousemove', (e) => {
+      const r = heroSection.getBoundingClientRect();
+      mouse.x = e.clientX - r.left;
+      mouse.y = e.clientY - r.top;
+    }, { passive: true });
+    heroSection.addEventListener('mouseleave', () => { mouse.x = null; mouse.y = null; });
+
+    const particleObserver = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => { animRunning = entry.isIntersecting; });
+    }, { threshold: 0 });
+    particleObserver.observe(heroSection);
+
+    requestAnimationFrame(stepParticles);
+  }
+
   /* ---------------- Hero role typewriter ---------------- */
   const heroRoleText = document.getElementById('heroRoleText');
   const ROLE_WORDS = ['AI Data Engineer', 'AI/ML Engineer', 'Generative AI Creator'];
