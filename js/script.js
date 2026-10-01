@@ -10,6 +10,7 @@
   /* ---------------- Scroll progress + nav state ---------------- */
   const progressBar = document.getElementById('progressBar');
   const nav = document.getElementById('nav');
+  const scrollTopBtn = document.getElementById('scrollTop');
 
   function onScroll() {
     const scrollTop = window.scrollY;
@@ -17,9 +18,64 @@
     const pct = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
     if (progressBar) progressBar.style.width = pct + '%';
     if (nav) nav.classList.toggle('is-scrolled', scrollTop > 40);
+    if (scrollTopBtn) scrollTopBtn.classList.toggle('is-visible', scrollTop > 600);
   }
   window.addEventListener('scroll', onScroll, { passive: true });
   onScroll();
+
+  scrollTopBtn?.addEventListener('click', () => {
+    window.scrollTo({ top: 0, behavior: reduceMotion ? 'auto' : 'smooth' });
+  });
+
+  /* ---------------- Toast ---------------- */
+  let toastTimer;
+  function showToast(msg) {
+    const el = document.getElementById('toast');
+    if (!el) return;
+    el.textContent = msg;
+    el.classList.add('is-visible');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => el.classList.remove('is-visible'), 2400);
+  }
+
+  /* ---------------- Copy email ---------------- */
+  document.getElementById('copyEmailBtn')?.addEventListener('click', async () => {
+    const email = 'asafctofficial@gmail.com';
+    try {
+      await navigator.clipboard.writeText(email);
+      showToast('Email copied to clipboard');
+    } catch (e) {
+      showToast(`Email: ${email}`);
+    }
+  });
+
+  /* ---------------- Animated stat counters ---------------- */
+  const statNums = document.querySelectorAll('.hero-stat-num[data-count]');
+  function animateCount(el) {
+    const target = parseFloat(el.getAttribute('data-count'));
+    const suffix = el.getAttribute('data-suffix') || '';
+    if (reduceMotion) { el.textContent = target + suffix; return; }
+    const duration = 1100;
+    const start = performance.now();
+    function tick(now) {
+      const p = Math.min((now - start) / duration, 1);
+      const eased = 1 - Math.pow(1 - p, 3);
+      el.textContent = Math.round(target * eased) + suffix;
+      if (p < 1) requestAnimationFrame(tick);
+    }
+    requestAnimationFrame(tick);
+  }
+  if (statNums.length) {
+    const statObserver = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          animateCount(entry.target);
+          statObserver.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.6 });
+    statNums.forEach((el) => statObserver.observe(el));
+  }
 
   /* ---------------- Mobile menu ---------------- */
   const burger = document.getElementById('navBurger');
