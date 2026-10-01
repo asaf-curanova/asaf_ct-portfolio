@@ -652,7 +652,56 @@
     </div>
   </section>
 
+  <!-- ===== BONUS: INTERACTIVE MINI-GAME ===== -->
+  <section class="game-section" id="play">
+    <div class="section-inner">
+      <p class="section-kicker reveal">Just for Fun</p>
+      <h2 class="section-title reveal">Walk through my portfolio.</h2>
+      <p class="section-sub reveal">
+        A small bonus — move the avatar into a zone with Arrow keys or WASD to pop up a quick summary.
+        Everything here also exists as a regular, fully readable section above, so there's no need to play if it's not your thing.
+      </p>
+
+      <div id="game-portfolio-section" class="game-wrap reveal">
+        <div class="game-toolbar">
+          <span class="game-hint" id="gameHint">Click "Enable Controls" to play — arrow keys / WASD to move.</span>
+          <button id="gameToggleBtn" class="btn btn-secondary game-toggle-btn" type="button" aria-pressed="false">Enable Game Controls</button>
+        </div>
+
+        <div class="game-canvas-wrap">
+          <canvas id="gameCanvas" width="720" height="420" role="img" aria-label="Interactive mini-game: move the avatar into a zone to view About, Skills, or Projects"></canvas>
+        </div>
+
+        <div class="game-dpad" id="gameDpad" aria-hidden="true">
+          <button type="button" class="dpad-btn dpad-up" data-dir="up" aria-label="Move up">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5M5 12l7-7 7 7"/></svg>
+          </button>
+          <button type="button" class="dpad-btn dpad-left" data-dir="left" aria-label="Move left">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 5l-7 7 7 7"/></svg>
+          </button>
+          <button type="button" class="dpad-btn dpad-down" data-dir="down" aria-label="Move down">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M19 12l-7 7-7-7"/></svg>
+          </button>
+          <button type="button" class="dpad-btn dpad-right" data-dir="right" aria-label="Move right">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </button>
+        </div>
+      </div>
+    </div>
+  </section>
+
 </main>
+
+<!-- ===== Game zone modal ===== -->
+<div class="game-modal" id="gameModal" aria-hidden="true">
+  <div class="game-modal-panel" role="dialog" aria-modal="true" aria-labelledby="gameModalTitle">
+    <button class="game-modal-close" id="gameModalClose" aria-label="Close">&times;</button>
+    <p class="game-modal-kicker" id="gameModalKicker">Zone</p>
+    <h3 id="gameModalTitle"></h3>
+    <div id="gameModalBody"></div>
+    <a href="#" id="gameModalLink" class="game-modal-link">See full section ↓</a>
+  </div>
+</div>
 
 <footer class="footer">
   <div class="section-inner footer-inner">
@@ -672,5 +721,6 @@
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
 <script src="js/script.js"></script>
+<script src="js/game.js" defer></script>
 </body>
 </html>
