@@ -1,5 +1,5 @@
 """Generates og-image.png and favicon assets for the portfolio, matching the site's
-dark blue/gold "trust + achievement" visual identity. Run once locally; not needed at deploy time."""
+dark, minimal, blue-to-purple premium technology identity. Run once locally; not needed at deploy time."""
 
 from PIL import Image, ImageDraw, ImageFont, ImageFilter
 import os
@@ -7,12 +7,11 @@ import os
 OUT_DIR = os.path.join(os.path.dirname(__file__), "..", "assets")
 os.makedirs(OUT_DIR, exist_ok=True)
 
-BG = (8, 9, 12, 255)
-ACCENT_1 = (76, 111, 239)    # cobalt blue
-ACCENT_2 = (95, 168, 255)    # sky blue
-ACCENT_3 = (217, 165, 68)    # gold
-TEXT = (237, 238, 241)
-MUTED = (154, 160, 170)
+BG = (10, 10, 13, 255)
+ACCENT_1 = (91, 127, 255)    # blue
+ACCENT_2 = (155, 107, 255)   # purple
+TEXT = (241, 241, 244)
+MUTED = (154, 156, 168)
 
 FONT_DIR = r"C:\Windows\Fonts"
 
@@ -35,11 +34,10 @@ def make_og():
     W, H = 1200, 630
     img = Image.new("RGBA", (W, H), BG)
 
-    add_glow(img, (120, 60), 320, ACCENT_1, alpha=70)
-    add_glow(img, (1080, 560), 300, ACCENT_2, alpha=65)
-    add_glow(img, (760, 160), 200, ACCENT_3, alpha=35)
+    add_glow(img, (120, 60), 320, ACCENT_1, alpha=65)
+    add_glow(img, (1080, 560), 320, ACCENT_2, alpha=60)
 
-    # top accent bar
+    # top accent bar (blue -> purple)
     bar = Image.new("RGBA", (W, 5), (0, 0, 0, 0))
     for x in range(W):
         t = x / W
@@ -53,8 +51,8 @@ def make_og():
     d = ImageDraw.Draw(img)
 
     eyebrow_font = font("consola.ttf", 22)
-    name_font = font("seguibl.ttf", 74)
-    role_font = font("segoeuisb.ttf" if os.path.exists(os.path.join(FONT_DIR, "segoeuisb.ttf")) else "segoeuib.ttf", 34)
+    name_font = font("seguibl.ttf", 70)
+    role_font = font("segoeuisb.ttf" if os.path.exists(os.path.join(FONT_DIR, "segoeuisb.ttf")) else "segoeuib.ttf", 32)
     tag_font = font("consola.ttf", 22)
 
     left = 90
@@ -62,20 +60,20 @@ def make_og():
     d.text((left, y), "PORTFOLIO", font=eyebrow_font, fill=(92, 97, 105, 255))
     y += 46
 
-    d.text((left, y), "MOHAMMED ASAF ", font=name_font, fill=TEXT)
-    name_w = d.textlength("MOHAMMED ASAF ", font=name_font)
-    d.text((left + name_w, y), "CT", font=name_font, fill=ACCENT_3)
+    d.text((left, y), "Turning Ideas Into", font=name_font, fill=TEXT)
+    y += 86
+    d.text((left, y), "Real-World Solutions", font=name_font, fill=ACCENT_2)
     y += 100
 
-    d.text((left, y), "AI Data Engineer", font=role_font, fill=MUTED)
-    y += 66
+    d.text((left, y), "Asaf CT — AI/ML & Creative Technology", font=role_font, fill=MUTED)
+    y += 60
 
-    tagline = "AI/ML  \u2022  Generative AI  \u2022  Data  \u2022  Computer Vision"
-    d.text((left, y), tagline, font=tag_font, fill=ACCENT_2)
+    tagline = "Computer Vision  \u2022  Data Engineering  \u2022  Generative AI"
+    d.text((left, y), tagline, font=tag_font, fill=ACCENT_1)
 
     # bottom-right small wordmark
     mark_font = font("seguibl.ttf", 26)
-    mark = "ASAF."
+    mark = "Asaf CT."
     mw = d.textlength(mark, font=mark_font)
     d.text((W - 90 - mw, H - 80), mark, font=mark_font, fill=TEXT)
 
@@ -95,7 +93,7 @@ def make_favicon(size, out_name):
     ImageDraw.Draw(mask).rounded_rectangle([0, 0, W, W], radius=radius, fill=255)
 
     bg = Image.new("RGBA", (W, W), BG)
-    add_glow(bg, (W * 0.28, H_ := W * 0.32), W * 0.42, ACCENT_1, alpha=110)
+    add_glow(bg, (W * 0.28, W * 0.32), W * 0.42, ACCENT_1, alpha=110)
     add_glow(bg, (W * 0.78, W * 0.78), W * 0.38, ACCENT_2, alpha=110)
 
     img.paste(bg, (0, 0), mask)
