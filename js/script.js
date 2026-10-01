@@ -553,7 +553,11 @@
       btn.className = 'cmdk-item' + (i === selectedIndex ? ' is-selected' : '');
       btn.innerHTML = `<span class="cmdk-icon">${cmd.icon}</span><span class="cmdk-label">${cmd.label}</span><span class="cmdk-hint">${cmd.hint}</span>`;
       btn.addEventListener('click', () => runCommand(cmd));
-      btn.addEventListener('mouseenter', () => { selectedIndex = i; renderCmdkList(); });
+      btn.addEventListener('mouseenter', () => {
+        selectedIndex = i;
+        cmdkList.querySelectorAll('.cmdk-item').forEach((el) => el.classList.remove('is-selected'));
+        btn.classList.add('is-selected');
+      });
       li.appendChild(btn);
       cmdkList.appendChild(li);
     });
@@ -575,6 +579,7 @@
     cmdkOverlay.classList.add('is-open');
     cmdkInput.value = '';
     filterCommands('');
+    cmdkList.scrollTop = 0;
     setTimeout(() => cmdkInput.focus(), 50);
   }
 
