@@ -156,14 +156,16 @@ section { padding: var(--section) 0; position: relative; }
 }
 
 /* ---------- Hero ---------- */
-.hero { min-height: 100vh; min-height: 100svh; display: flex; align-items: flex-end; padding: 130px 0 clamp(48px, 7vw, 96px); }
+.hero { min-height: 100vh; min-height: 100svh; display: flex; flex-direction: column; justify-content: flex-end; padding: 120px 0 clamp(40px, 6vw, 80px); }
+.hero-top { max-width: var(--wrap); width: 100%; margin: 0 auto; padding: 0 calc(var(--gutter) + 6px); }
 .hero-grid { max-width: var(--wrap); width: 100%; margin: 0 auto; padding: 0 calc(var(--gutter) + 6px); display: grid; grid-template-columns: minmax(0, 1fr) minmax(280px, 360px); gap: clamp(32px, 5vw, 80px); align-items: end; }
 @media (max-width: 960px) { .hero-grid { grid-template-columns: 1fr; gap: 44px; } }
 
 .hero-eyebrow { margin-bottom: clamp(14px, 2vw, 26px); }
-.wordmark { font-family: var(--display); font-weight: 900; font-stretch: 100%; font-size: clamp(90px, 17.5vw, 270px); line-height: .8; letter-spacing: -0.055em; text-transform: uppercase; margin-left: -0.04em; padding-bottom: 0.05em; }
-@media (max-width: 960px) { .wordmark { font-size: clamp(90px, 27vw, 260px); } }
-.hero-role { font-family: var(--display); font-weight: 600; font-stretch: 72%; text-transform: uppercase; font-size: clamp(30px, 6.4vw, 92px); line-height: 1; letter-spacing: -0.02em; color: var(--muted); margin: clamp(10px, 1.6vw, 22px) 0 clamp(22px, 3vw, 40px); }
+.wordmark { font-family: var(--display); font-weight: 900; font-stretch: 75%; font-size: 9.6vw; line-height: .9; letter-spacing: -0.04em; text-transform: uppercase; white-space: nowrap; margin: 0 0 clamp(22px, 3vw, 40px) -0.03em; }
+.wordmark .rise { padding-right: 0.05em; }
+.hero-grid { align-items: end; }
+.hero-role { font-family: var(--display); font-weight: 600; font-stretch: 72%; text-transform: uppercase; font-size: clamp(26px, 4.2vw, 64px); line-height: 1; letter-spacing: -0.02em; color: var(--muted); margin: 0 0 clamp(18px, 2.4vw, 30px); }
 .hero-desc { max-width: 560px; font-size: clamp(15.5px, 1.4vw, 18px); color: var(--muted); line-height: 1.65; margin-bottom: 34px; }
 
 .spec { border: 1px solid var(--line-strong); border-radius: var(--r-lg); background: rgba(19,19,19,0.72); }

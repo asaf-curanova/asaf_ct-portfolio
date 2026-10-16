@@ -34,6 +34,26 @@
   const footerYear = document.getElementById('footerYear');
   if (footerYear) footerYear.textContent = new Date().getFullYear();
 
+  /* ================= Fit name to one line ================= */
+  (function fitName() {
+    const h = document.getElementById('wordmark');
+    const inner = h?.querySelector('.rise > span');
+    if (!h || !inner) return;
+    function fit() {
+      const avail = h.parentElement.clientWidth
+        - parseFloat(getComputedStyle(h.parentElement).paddingLeft) * 2;
+      if (avail <= 0) return;
+      h.style.fontSize = '100px';
+      inner.style.display = 'inline-block';
+      const w = inner.getBoundingClientRect().width;
+      inner.style.display = '';
+      if (w > 0) h.style.fontSize = Math.floor(100 * (avail * 0.985) / w) + 'px';
+    }
+    fit();
+    window.addEventListener('resize', fit);
+    if (document.fonts?.ready) document.fonts.ready.then(fit);
+  })();
+
   /* ================= Nav state, to-top ================= */
   const nav = document.getElementById('nav');
   const toTop = document.getElementById('toTop');
