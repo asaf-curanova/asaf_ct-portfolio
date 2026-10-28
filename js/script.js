@@ -298,8 +298,210 @@
   poNext?.addEventListener('click', () => renderProject((currentIdx + 1) % PROJECTS.length));
   document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape') {
-      if (overlay?.classList.contains('is-open')) closeProject();
+      if (overlay?.classList.contains('is-open')) { closeProject(); e.stopImmediatePropagation(); }
       else if (mobileMenu?.classList.contains('is-open')) setMenu(false);
     }
   });
+
+  /* ================= 3D studio walkthrough =================
+     An opt-in spatial view. Every room is built from the page's own
+     content (cloned from the DOM), so nothing is duplicated or invented;
+     the normal page stays the accessible default. */
+  (function studio() {
+    const openBtn = document.getElementById('studioOpen');
+    if (!openBtn) return;
+    const DEPTH = 1500;
+    const txt = (el, sel) => el?.querySelector(sel)?.textContent.trim() || '';
+    const mk = (tag, cls, text) => {
+      const e = document.createElement(tag);
+      if (cls) e.className = cls;
+      if (text) e.textContent = text;
+      return e;
+    };
+
+    const ROOMS = [
+      { id: 'work', label: 'Work', title: 'Selected work', build(body) {
+        const grid = mk('div', 'room-grid');
+        document.querySelectorAll('.work-card').forEach((card) => {
+          const src = card.querySelector('.wc-open[data-project]');
+          if (!src) return;
+          const p = mk('button', 'room-panel');
+          p.type = 'button';
+          p.dataset.project = src.dataset.project;
+          p.append(mk('span', 'hud', txt(card, '.wc-top span')), mk('h3', '', src.textContent.trim()), mk('p', '', txt(card, '.wc-desc')));
+          p.addEventListener('click', () => openProject(p.dataset.project, p));
+          grid.appendChild(p);
+        });
+        body.appendChild(grid);
+      } },
+      { id: 'about', label: 'About', title: 'About', build(body) {
+        body.appendChild(mk('p', 'room-statement', txt(document, '.about-statement')));
+        document.querySelectorAll('.about-copy p').forEach((p) => body.appendChild(mk('p', 'room-panel', p.textContent.trim())));
+      } },
+      { id: 'capabilities', label: 'Capabilities', title: 'What I build', build(body) {
+        const grid = mk('div', 'room-grid');
+        document.querySelectorAll('.cap-row').forEach((row) => {
+          const p = mk('div', 'room-panel');
+          p.append(mk('span', 'hud', txt(row, '.cap-num')), mk('h3', '', txt(row, 'h3')), mk('p', '', row.querySelector('p')?.textContent.trim()));
+          grid.appendChild(p);
+        });
+        body.appendChild(grid);
+      } },
+      { id: 'experience', label: 'Experience', title: 'Career', build(body) {
+        const grid = mk('div', 'room-grid');
+        document.querySelectorAll('.exp-row').forEach((row) => {
+          const p = mk('div', 'room-panel');
+          p.append(mk('span', 'hud', txt(row, '.exp-date')), mk('h3', '', txt(row, 'h3').replace(/\s+/g, ' ')), mk('p', '', txt(row, '.exp-org')), mk('p', '', txt(row, '.exp-desc')));
+          grid.appendChild(p);
+        });
+        body.appendChild(grid);
+      } },
+      { id: 'contact', label: 'Contact', title: 'Contact', build(body) {
+        const mail = document.querySelector('.contact-mail');
+        if (mail) {
+          const a = mk('a', 'room-mail', mail.textContent.replace('↗', '').trim());
+          a.href = mail.getAttribute('href');
+          body.appendChild(a);
+        }
+        const links = mk('div', 'room-links');
+        document.querySelectorAll('.contact-actions a').forEach((src) => links.appendChild(src.cloneNode(true)));
+        body.appendChild(links);
+      } },
+    ];
+
+    const root = mk('div', 'studio');
+    root.setAttribute('role', 'dialog');
+    root.setAttribute('aria-modal', 'true');
+    root.setAttribute('aria-label', '3D walkthrough of the portfolio');
+    root.setAttribute('aria-hidden', 'true');
+    const scene = mk('div', 'studio-scene');
+    const world = mk('div', 'studio-world');
+    const floor = mk('div', 'studio-floor');
+    floor.style.height = (ROOMS.length * DEPTH + 3000) + 'px';
+    world.appendChild(floor);
+    for (let i = 0; i <= ROOMS.length * 3; i++) {
+      const ring = mk('div', 'studio-ring' + (i % 3 === 0 ? ' is-key' : ''));
+      ring.style.transform = `translateZ(${600 - i * (DEPTH / 3)}px)`;
+      world.appendChild(ring);
+    }
+    const roomEls = ROOMS.map((r, i) => {
+      const el = mk('section', 'room');
+      el.setAttribute('aria-label', r.label);
+      el.style.transform = `translate(-50%, -50%) translateZ(${-i * DEPTH}px)`;
+      const head = mk('div', 'room-head');
+      head.append(mk('h2', 'room-title', r.title), mk('span', 'hud', `${String(i + 1).padStart(2, '0')} / ${String(ROOMS.length).padStart(2, '0')}`));
+      const body = mk('div', 'room-body');
+      r.build(body);
+      el.append(head, body);
+      world.appendChild(el);
+      return el;
+    });
+    scene.appendChild(world);
+
+    const top = mk('div', 'studio-top');
+    const hint = mk('span', 'hud studio-hint', 'Arrow keys · scroll · swipe to move');
+    const closeBtn = mk('button', 'btn btn-line');
+    closeBtn.type = 'button';
+    closeBtn.textContent = 'Exit studio ×';
+    top.append(hint, closeBtn);
+
+    const hud = mk('div', 'studio-hud');
+    const prev = mk('button', 'studio-step', '←');
+    const next = mk('button', 'studio-step', '→');
+    prev.type = next.type = 'button';
+    prev.setAttribute('aria-label', 'Previous room');
+    next.setAttribute('aria-label', 'Next room');
+    const dots = mk('div', 'studio-dots');
+    const dotEls = ROOMS.map((r, i) => {
+      const d = mk('button', 'studio-dot', r.label);
+      d.type = 'button';
+      d.addEventListener('click', () => go(i));
+      dots.appendChild(d);
+      return d;
+    });
+    hud.append(prev, dots, next);
+    root.append(scene, top, hud);
+    document.body.appendChild(root);
+
+    let idx = 0, lastMove = 0, lastFocus = null, pushed = false;
+    function go(i) {
+      idx = Math.max(0, Math.min(ROOMS.length - 1, i));
+      world.style.transform = `translateZ(${idx * DEPTH}px)`;
+      roomEls.forEach((el, n) => {
+        const d = Math.abs(n - idx);
+        el.style.opacity = d === 0 ? 1 : 0;
+        el.toggleAttribute('inert', d !== 0);
+      });
+      dotEls.forEach((d, n) => d.setAttribute('aria-current', String(n === idx)));
+      prev.disabled = idx === 0;
+      next.disabled = idx === ROOMS.length - 1;
+      lastMove = Date.now();
+    }
+    function open() {
+      lastFocus = document.activeElement;
+      go(0);
+      root.classList.add('is-open');
+      root.setAttribute('aria-hidden', 'false');
+      document.body.classList.add('no-scroll');
+      closeBtn.focus();
+      history.pushState({ studio: true }, '', '#studio');
+      pushed = true;
+    }
+    function close(fromPop) {
+      if (!root.classList.contains('is-open')) return;
+      root.classList.remove('is-open');
+      root.setAttribute('aria-hidden', 'true');
+      document.body.classList.remove('no-scroll');
+      if (pushed && !fromPop) history.back();
+      pushed = false;
+      lastFocus?.focus();
+    }
+    openBtn.addEventListener('click', open);
+    closeBtn.addEventListener('click', () => close(false));
+    prev.addEventListener('click', () => go(idx - 1));
+    next.addEventListener('click', () => go(idx + 1));
+    window.addEventListener('popstate', () => close(true));
+    // Contact links inside the studio should leave the studio before jumping.
+    root.addEventListener('click', (e) => {
+      const a = e.target.closest('a[href^="#"]');
+      if (a) close(false);
+    });
+
+    document.addEventListener('keydown', (e) => {
+      if (!root.classList.contains('is-open') || overlay?.classList.contains('is-open')) return;
+      if (e.key === 'Escape') close(false);
+      else if (e.key === 'ArrowRight' || e.key === 'PageDown') { e.preventDefault(); go(idx + 1); }
+      else if (e.key === 'ArrowLeft' || e.key === 'PageUp') { e.preventDefault(); go(idx - 1); }
+      else if (e.key === 'Home') go(0);
+      else if (e.key === 'End') go(ROOMS.length - 1);
+    });
+
+    function scrollableAt(target, dir) {
+      const body = target.closest?.('.room-body');
+      if (!body || body.scrollHeight <= body.clientHeight + 1) return false;
+      return dir > 0 ? body.scrollTop + body.clientHeight < body.scrollHeight - 1 : body.scrollTop > 0;
+    }
+    root.addEventListener('wheel', (e) => {
+      e.preventDefault();
+      if (Math.abs(e.deltaY) < 25 || Date.now() - lastMove < 900) return;
+      const dir = e.deltaY > 0 ? 1 : -1;
+      if (scrollableAt(e.target, dir)) { e.target.closest('.room-body').scrollTop += e.deltaY; return; }
+      go(idx + dir);
+    }, { passive: false });
+
+    let touchY = null, touchX = null;
+    root.addEventListener('touchstart', (e) => { touchY = e.touches[0].clientY; touchX = e.touches[0].clientX; }, { passive: true });
+    root.addEventListener('touchend', (e) => {
+      if (touchY === null) return;
+      const dy = touchY - e.changedTouches[0].clientY;
+      const dx = touchX - e.changedTouches[0].clientX;
+      const dir = dy > 0 ? 1 : -1;
+      const horizontal = Math.abs(dx) > Math.abs(dy);
+      const delta = horizontal ? dx : dy;
+      if (Math.abs(delta) > 70 && Date.now() - lastMove > 700 && !(!horizontal && scrollableAt(e.target, dir))) {
+        go(idx + (delta > 0 ? 1 : -1));
+      }
+      touchY = touchX = null;
+    }, { passive: true });
+  })();
 })();
