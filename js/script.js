@@ -321,7 +321,7 @@
     };
 
     const ROOMS = [
-      { id: 'work', label: 'Work', title: 'Selected work', build(body) {
+      { id: 'work', ra: '#7c5cff', art: "<rect x=\"150\" y=\"110\" width=\"320\" height=\"230\"/><path d=\"M150 150v-40h40M470 150v-40h-40M150 300v40h40M470 300v40h-40\" stroke-width=\"3\"/><rect x=\"520\" y=\"190\" width=\"230\" height=\"160\"/><rect x=\"330\" y=\"260\" width=\"150\" height=\"110\" stroke-dasharray=\"6 6\"/><path d=\"M310 225h40M330 205v40\"/><path d=\"M60 410h780\" stroke-dasharray=\"2 10\"/><path d=\"M60 60h780M60 450h780\" opacity=\".4\"/>", label: 'Work', title: 'Selected work', build(body) {
         const grid = mk('div', 'room-grid');
         document.querySelectorAll('.work-card').forEach((card) => {
           const src = card.querySelector('.wc-open[data-project]');
@@ -342,11 +342,11 @@
         });
         body.appendChild(grid);
       } },
-      { id: 'about', label: 'About', title: 'About', build(body) {
+      { id: 'about', ra: '#4cc9f0', art: "<circle cx=\"450\" cy=\"250\" r=\"60\"/><circle cx=\"450\" cy=\"250\" r=\"130\"/><circle cx=\"450\" cy=\"250\" r=\"210\" stroke-dasharray=\"4 8\"/><circle cx=\"450\" cy=\"250\" r=\"290\" opacity=\".5\"/><circle cx=\"580\" cy=\"250\" r=\"9\"/><circle cx=\"318\" cy=\"168\" r=\"7\"/><circle cx=\"560\" cy=\"75\" r=\"6\"/><circle cx=\"262\" cy=\"410\" r=\"8\"/><circle cx=\"700\" cy=\"380\" r=\"6\"/><path d=\"M450 250L580 250M450 250L318 168M450 250L560 75M450 250L262 410M450 250L700 380M580 250L700 380M318 168L560 75\" opacity=\".7\"/>", label: 'About', title: 'About', build(body) {
         body.appendChild(mk('p', 'room-statement', txt(document, '.about-statement')));
         document.querySelectorAll('.about-copy p').forEach((p) => body.appendChild(mk('p', 'room-panel', p.textContent.trim())));
       } },
-      { id: 'capabilities', label: 'Capabilities', title: 'What I build', build(body) {
+      { id: 'capabilities', ra: '#3fd9a8', art: "<path d=\"M450 90L720 190L450 290L180 190Z\"/><path d=\"M450 150L720 250L450 350L180 250Z\" opacity=\".75\"/><path d=\"M450 210L720 310L450 410L180 310Z\" opacity=\".5\"/><path d=\"M180 190v120M720 190v120M450 290v120\" opacity=\".5\"/><path d=\"M450 40v50\" stroke-dasharray=\"3 6\"/><circle cx=\"450\" cy=\"190\" r=\"6\"/>", label: 'Capabilities', title: 'What I build', build(body) {
         const grid = mk('div', 'room-grid');
         document.querySelectorAll('.cap-row').forEach((row) => {
           const p = mk('div', 'room-panel');
@@ -355,16 +355,16 @@
         });
         body.appendChild(grid);
       } },
-      { id: 'experience', label: 'Experience', title: 'Career', build(body) {
+      { id: 'experience', ra: '#f4b942', art: "<path d=\"M80 400H260V330H420V260H580V190H740V120H850\" stroke-width=\"2\"/><circle cx=\"80\" cy=\"400\" r=\"9\"/><circle cx=\"260\" cy=\"330\" r=\"9\"/><circle cx=\"420\" cy=\"260\" r=\"9\"/><circle cx=\"580\" cy=\"190\" r=\"9\"/><circle cx=\"740\" cy=\"120\" r=\"12\"/><path d=\"M80 400v60M260 330v130M420 260v200M580 190v270M740 120v340\" stroke-dasharray=\"3 8\" opacity=\".5\"/><path d=\"M60 460h800\" opacity=\".6\"/>", label: 'Experience', title: 'Career', build(body) {
         const grid = mk('div', 'room-grid');
         document.querySelectorAll('.exp-row').forEach((row) => {
           const p = mk('div', 'room-panel');
-          p.append(mk('span', 'hud', txt(row, '.exp-date')), mk('h3', '', txt(row, 'h3').replace(/\s+/g, ' ')), mk('p', '', txt(row, '.exp-org')), mk('p', '', txt(row, '.exp-desc')));
+          p.append(mk('span', 'hud', txt(row, '.exp-date')), mk('h3', '', (() => { const h = row.querySelector('h3').cloneNode(true); h.querySelectorAll('br').forEach((b) => b.replaceWith(' ')); return h.textContent.replace(/\s+/g, ' ').trim(); })()), mk('p', '', txt(row, '.exp-org')), mk('p', '', txt(row, '.exp-desc')));
           grid.appendChild(p);
         });
         body.appendChild(grid);
       } },
-      { id: 'contact', label: 'Contact', title: 'Contact', build(body) {
+      { id: 'contact', ra: '#ff6b8b', art: "<circle cx=\"200\" cy=\"250\" r=\"12\"/><path d=\"M200 190a60 60 0 0 1 0 120M200 150a100 100 0 0 1 0 200M200 110a140 140 0 0 1 0 280M200 70a180 180 0 0 1 0 360M200 30a220 220 0 0 1 0 440\" opacity=\".8\"/><rect x=\"560\" y=\"170\" width=\"260\" height=\"160\"/><path d=\"M560 170L690 260L820 170\" /><path d=\"M200 250H540\" stroke-dasharray=\"4 8\"/>", label: 'Contact', title: 'Contact', build(body) {
         const mail = document.querySelector('.contact-mail');
         if (mail) {
           const a = mk('a', 'room-mail', mail.textContent.replace('↗', '').trim());
@@ -395,6 +395,16 @@
     const roomEls = ROOMS.map((r, i) => {
       const el = mk('section', 'room');
       el.setAttribute('aria-label', r.label);
+      el.style.setProperty('--ra', r.ra);
+      const art = mk('div', 'room-art');
+      art.setAttribute('aria-hidden', 'true');
+      art.style.setProperty('--ra', r.ra);
+      art.style.transform = `translate(-50%, -50%) translateZ(${-i * DEPTH - 650}px)`;
+      art.innerHTML = `<svg viewBox="0 0 900 500" fill="none" stroke="currentColor" stroke-width="1.2" preserveAspectRatio="xMidYMid meet">${r.art}</svg>`;
+      world.appendChild(art);
+      const big = mk('span', 'room-bignum', String(i + 1).padStart(2, '0'));
+      big.setAttribute('aria-hidden', 'true');
+      el.appendChild(big);
       el.style.transform = `translate(-50%, -50%) translateZ(${-i * DEPTH}px)`;
       const head = mk('div', 'room-head');
       head.append(mk('h2', 'room-title', r.title), mk('span', 'hud', `${String(i + 1).padStart(2, '0')} / ${String(ROOMS.length).padStart(2, '0')}`));
@@ -402,6 +412,7 @@
       r.build(body);
       el.append(head, body);
       world.appendChild(el);
+      el._art = art;
       return el;
     });
     scene.appendChild(world);
@@ -438,6 +449,7 @@
       roomEls.forEach((el, n) => {
         const d = Math.abs(n - idx);
         el.style.opacity = d === 0 ? 1 : 0;
+        el._art.style.opacity = d === 0 ? 1 : 0;
         el.toggleAttribute('inert', d !== 0);
       });
       dotEls.forEach((d, n) => d.setAttribute('aria-current', String(n === idx)));
