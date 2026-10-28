@@ -12,6 +12,7 @@
     const finish = () => {
       el?.classList.add('is-done');
       document.body.classList.add('is-loaded');
+      document.dispatchEvent(new Event('portfolio:loaded'));
     };
     if (!el || reduceMotion) { finish(); return; }
     let n = 0;
@@ -437,15 +438,14 @@
       next.disabled = idx === ROOMS.length - 1;
       lastMove = Date.now();
     }
-    function open() {
+    function open(auto) {
       lastFocus = document.activeElement;
       go(0);
       root.classList.add('is-open');
       root.setAttribute('aria-hidden', 'false');
       document.body.classList.add('no-scroll');
       closeBtn.focus();
-      history.pushState({ studio: true }, '', '#studio');
-      pushed = true;
+      if (auto !== true) { history.pushState({ studio: true }, '', '#studio'); pushed = true; }
     }
     function close(fromPop) {
       if (!root.classList.contains('is-open')) return;
@@ -456,7 +456,7 @@
       pushed = false;
       lastFocus?.focus();
     }
-    openBtn.addEventListener('click', open);
+    openBtn.addEventListener('click', () => open());
     closeBtn.addEventListener('click', () => close(false));
     prev.addEventListener('click', () => go(idx - 1));
     next.addEventListener('click', () => go(idx + 1));
@@ -466,6 +466,15 @@
       const a = e.target.closest('a[href^="#"]');
       if (a) close(false);
     });
+
+    // Default entry: the studio opens on first load. Skipped for reduced motion
+    // and for deep links to a specific section, which get the normal page.
+    const deepLink = location.hash && location.hash !== '#studio' && location.hash !== '#top';
+    if (!reduceMotion && !deepLink) {
+      const auto = () => open(true);
+      if (document.body.classList.contains('is-loaded')) auto();
+      else document.addEventListener('portfolio:loaded', auto, { once: true });
+    }
 
     document.addEventListener('keydown', (e) => {
       if (!root.classList.contains('is-open') || overlay?.classList.contains('is-open')) return;
