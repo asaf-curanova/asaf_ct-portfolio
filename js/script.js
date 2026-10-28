@@ -329,6 +329,13 @@
           const p = mk('button', 'room-panel');
           p.type = 'button';
           p.dataset.project = src.dataset.project;
+          const art = card.querySelector('.wc-visual');
+          if (art) {
+            const thumb = mk('div', 'room-thumb');
+            thumb.setAttribute('aria-hidden', 'true');
+            thumb.appendChild(art.cloneNode(true).firstElementChild || art.cloneNode(true));
+            p.appendChild(thumb);
+          }
           p.append(mk('span', 'hud', txt(card, '.wc-top span')), mk('h3', '', src.textContent.trim()), mk('p', '', txt(card, '.wc-desc')));
           p.addEventListener('click', () => openProject(p.dataset.project, p));
           grid.appendChild(p);
